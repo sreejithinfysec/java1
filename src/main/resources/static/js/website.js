@@ -20,7 +20,7 @@ function handleError(error) {
 function submitRequest() {
   var url = document.getElementById('url').value;
   if (!url) {
-    showAlert("Please enter an URL");
+    showCustomAlert("Please enter an URL");
     return;
   }
   $.ajax({
@@ -28,13 +28,15 @@ function submitRequest() {
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
-      'url': sanitize(url),
-      'customHeaderKey': sanitize(document.getElementById('customHeaderKey').value) || '',
-      'customHeaderValue': sanitize(document.getElementById('customHeaderValue').value) || ''
+      'url': url,
+      'customHeaderKey': document.getElementById('customHeaderKey').value || '',
+      'customHeaderValue': document.getElementById('customHeaderValue').value || ''
     }),
     success: updateOutput,
     error: handleError
   });
+}
+
 }
 
 function showAlert(message) {
