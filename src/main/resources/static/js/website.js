@@ -18,23 +18,215 @@ function handleError(error) {
 }
 
 function submitRequest() {
-  var url = document.getElementById('url').value
+  var url = document.getElementById('url').value;
   if (!url) {
-    alert("Please enter an URL")
-    return
+    showAlert("Please enter an URL");
+    return;
   }
+  url = sanitizeHtml(url);
   $.ajax({
     url: '/test-website',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
       'url': url,
-      'customHeaderKey': document.getElementById('customHeaderKey').value || '',
-      'customHeaderValue': document.getElementById('customHeaderValue').value || ''
+      'customHeaderKey': sanitizeHtml(document.getElementById('customHeaderKey').value || ''),
+      'customHeaderValue': sanitizeHtml(document.getElementById('customHeaderValue').value || '')
     }),
     success: updateOutput,
     error: handleError
-  })
+  });
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
+    success: updateOutput,
+    error: handleError
+  });
+}
+
+    success: updateOutput,
+    error: handleError
+  });
+}
+
+}
+
+}
+
+}
+
+}
+
+}
+
+}
+
+function showAlert(message) {
+  let sanitizedMessage = sanitize(message);
+  let div = document.createElement("div");
+  div.innerHTML = sanitizedMessage;
+  let sanitizedHTML = div.textContent || div.innerText || "";
+  // Custom alert system implementation here
+}
+
+}
+
+function showAlert(message) {
+  let sanitizedMessage = sanitize(message);
+  let div = document.createElement("div");
+  div.innerHTML = sanitizedMessage;
+  let sanitizedHTML = div.textContent || div.innerText || "";
+  // Custom alert system implementation here
+}
+
+}
+
+}
+
+}
+
+}
+
+}
+
+}
+
+
 }
 
 var form = document.querySelectorAll('form')[0]

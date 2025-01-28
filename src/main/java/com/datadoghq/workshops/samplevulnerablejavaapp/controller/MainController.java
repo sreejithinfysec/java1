@@ -31,19 +31,116 @@ public class MainController {
   @Autowired
   private FileService fileService;
 
-  @RequestMapping(method=RequestMethod.POST, value="/test-domain", consumes="application/json")
-  public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request) {
-    log.info("Testing domain " + request.domainName);
+@RequestMapping(method=RequestMethod.POST, value="/test-domain", consumes="application/json")
+public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request) {
+    log.info("Testing domain " + request.getDomainName());
     try {
-      String result = domainTestService.testDomain(request.domainName);
-      return new ResponseEntity<>(result, HttpStatus.OK);
+        String result = domainTestService.testDomain(request.getDomainName());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     } catch(InvalidDomainException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     } catch (UnableToTestDomainException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     } catch(Exception e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
+@RestController
+@RequestMapping("/api")
+public class MainController {
+
+    private final DomainTestService domainTestService;
+
+    public MainController(DomainTestService domainTestService) {
+        this.domainTestService = domainTestService;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/test-domain", consumes = "application/json")
+    public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request) {
+        log.info("Testing domain {}", request.getDomainName());
+        try {
+            String result = domainTestService.testDomain(request.getDomainName());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (InvalidDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (UnableToTestDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            log.error("Unexpected error occurred", e);
+            return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+
+}
+
+}
+
+@RestController
+@RequestMapping("/api")
+public class MainController {
+
+    private final DomainTestService domainTestService;
+
+    public MainController(DomainTestService domainTestService) {
+        this.domainTestService = domainTestService;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/test-domain", consumes = "application/json")
+    public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request) {
+        log.info("Testing domain {}", request.getDomainName());
+        try {
+            String result = domainTestService.testDomain(request.getDomainName());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (InvalidDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (UnableToTestDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            log.error("Unexpected error occurred", e);
+            return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+
+}
+
+}
+
+}
+
+@RestController
+@RequestMapping("/api")
+public class MainController {
+
+    private final DomainTestService domainTestService;
+
+    public MainController(DomainTestService domainTestService) {
+        this.domainTestService = domainTestService;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/test-domain", consumes = "application/json")
+    public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request) {
+        log.info("Testing domain {}", request.getDomainName());
+        try {
+            String result = domainTestService.testDomain(request.getDomainName());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (InvalidDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (UnableToTestDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            log.error("Unexpected error occurred", e);
+            return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+
+}
+
+}
+
   }
 
   @RequestMapping(method=RequestMethod.POST, value="/test-website", consumes="application/json")
@@ -53,10 +150,97 @@ public class MainController {
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
-  @RequestMapping(method=RequestMethod.POST, value="/view-file", consumes="application/json")
-  public ResponseEntity<String> viewFile(@RequestBody ViewFileRequest request) {
-    log.info("Reading file " + request.path);
+@RequestMapping(method=RequestMethod.POST, value="/view-file", consumes="application/json")
+public ResponseEntity<String> viewFile(@Valid @RequestBody ViewFileRequest request) {
+    log.info("Reading file {}", request.getPath());
     try {
+        String result = fileService.readFile(request.getPath());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (FileForbiddenFileException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    } catch (FileReadException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+}
+
+        // Validate the request
+        if (request == null || request.path == null || request.path.isEmpty()) {
+            throw new IllegalArgumentException("Invalid request");
+        }
+
+        // Check if the file exists
+        String result = fileService.readFile(request.path);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (FileNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (FileForbiddenFileException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    } catch (FileReadException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+        // Log the error and return a generic server error
+        log.error("An error occurred while reading the file", e);
+        return new ResponseEntity<>("An error occurred while reading the file", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+        // Validate the request
+        if (request == null || request.path == null || request.path.isEmpty()) {
+            throw new IllegalArgumentException("Invalid request");
+        }
+
+        // Check if the file exists
+        String result = fileService.readFile(request.path);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (FileNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (FileForbiddenFileException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    } catch (FileReadException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+        // Log the error and return a generic server error
+        log.error("An error occurred while reading the file", e);
+        return new ResponseEntity<>("An error occurred while reading the file", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+        String result = fileService.readFile(request.getPath());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (FileForbiddenFileException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    } catch (FileReadException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+}
+
+        // Validate the request
+        if (request == null || request.path == null || request.path.isEmpty()) {
+            throw new IllegalArgumentException("Invalid request");
+        }
+
+        // Check if the file exists
+        String result = fileService.readFile(request.path);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (FileNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (FileForbiddenFileException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    } catch (FileReadException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+        // Log the error and return a generic server error
+        log.error("An error occurred while reading the file", e);
+        return new ResponseEntity<>("An error occurred while reading the file", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
       String result = fileService.readFile(request.path);
       return new ResponseEntity<>(result, HttpStatus.OK);
     } catch (FileForbiddenFileException e) {
