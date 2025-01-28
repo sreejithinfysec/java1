@@ -18,9 +18,9 @@ function handleError(error) {
 }
 
 function submitRequest() {
-  var url = document.getElementById('url').value;
+  var url = DOMPurify.sanitize(document.getElementById('url').value);
   if (!url) {
-    showAlert("Please enter an URL");
+    alert("Please enter an URL");
     return;
   }
   $.ajax({
@@ -28,12 +28,15 @@ function submitRequest() {
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
-      'url': url
+      'url': url,
+      'customHeaderKey': DOMPurify.sanitize(document.getElementById('customHeaderKey').value) || '',
+      'customHeaderValue': DOMPurify.sanitize(document.getElementById('customHeaderValue').value) || ''
     }),
     success: updateOutput,
     error: handleError
   });
 }
+
 
 }
 
