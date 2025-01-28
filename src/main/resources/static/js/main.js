@@ -37,6 +37,11 @@ function submitRequest() {
   });
 }
 
+    success: updateOutput,
+    error: handleError
+  });
+}
+
 }
 
 }
