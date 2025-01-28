@@ -18,23 +18,26 @@ function handleError(error) {
 }
 
 function submitRequest() {
-  var url = DOMPurify.sanitize(document.getElementById('url').value);
+  var url = document.getElementById('url').value;
   if (!url) {
-    alert("Please enter an URL");
+    displayMessageUsingModal("Please enter an URL");
     return;
   }
+  url = sanitize(url);
   $.ajax({
     url: '/test-website',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
       'url': url,
-      'customHeaderKey': DOMPurify.sanitize(document.getElementById('customHeaderKey').value) || '',
-      'customHeaderValue': DOMPurify.sanitize(document.getElementById('customHeaderValue').value) || ''
+      'customHeaderKey': sanitize(document.getElementById('customHeaderKey').value || ''),
+      'customHeaderValue': sanitize(document.getElementById('customHeaderValue').value || '')
     }),
     success: updateOutput,
     error: handleError
   });
+}
+
 }
 
 }
