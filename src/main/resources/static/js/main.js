@@ -18,14 +18,11 @@ function handleError(error) {
 }
 
 function submitRequest() {
-  var domainName = document.getElementById('domain').value;
+  var domainName = $('#domain').val();
   if (!domainName) {
-    // Replace alert with customizable alternative
     alert("Please enter a domain name");
     return;
   }
-  // Sanitize the input before sending it to the server
-  domainName = sanitize(domainName);
   $.ajax({
     url: '/test-domain',
     method: 'POST',
@@ -33,6 +30,11 @@ function submitRequest() {
     data: JSON.stringify({
       'domainName': domainName
     }),
+    success: updateOutput,
+    error: handleError
+  });
+}
+
     success: updateOutput,
     error: handleError
   });
