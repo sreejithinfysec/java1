@@ -176,6 +176,29 @@ public ResponseEntity<String> viewFile(@RequestBody ViewFileRequest request) {
     }
 }
 
+        // Validate the request
+        if (request == null || request.path == null || request.path.isEmpty()) {
+            throw new IllegalArgumentException("Invalid request");
+        }
+
+        // Check if the file exists
+        String result = fileService.readFile(request.path);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (FileNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (FileForbiddenFileException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    } catch (FileReadException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+        // Log the error and return a generic server error
+        log.error("An error occurred while reading the file", e);
+        return new ResponseEntity<>("An error occurred while reading the file", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
         String result = fileService.readFile(request.getPath());
         return new ResponseEntity<>(result, HttpStatus.OK);
     } catch (FileForbiddenFileException e) {
