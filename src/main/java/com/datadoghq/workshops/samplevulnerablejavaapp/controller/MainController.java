@@ -33,18 +33,20 @@ public class MainController {
 
 @RequestMapping(method=RequestMethod.POST, value="/test-domain", consumes="application/json")
 public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request) {
-    log.info("Testing domain " + request.getDomainName());
-    try {
-        String result = domainTestService.testDomain(request.getDomainName());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    } catch(InvalidDomainException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    } catch (UnableToTestDomainException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch(Exception e) {
-        log.error("An error occurred while testing domain", e);
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  Logger log = LoggerFactory.getLogger(MainController.class);
+  log.info("Testing domain " + Base64.getEncoder().encodeToString(request.domainName.getBytes()));
+  try {
+    String result = domainTestService.testDomain(request.domainName);
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  } catch(InvalidDomainException e) {
+    return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+  } catch (UnableToTestDomainException e) {
+    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  } catch(Exception e) {
+    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
 }
 
   }
