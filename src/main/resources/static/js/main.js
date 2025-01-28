@@ -53,6 +53,11 @@ function submitRequest() {
   });
 }
 
+    success: updateOutput,
+    error: handleError
+  });
+}
+
 }
 
 var form = document.querySelectorAll('form')[0]
