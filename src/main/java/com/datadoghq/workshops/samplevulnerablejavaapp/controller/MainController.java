@@ -42,8 +42,11 @@ public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request)
     } catch (UnableToTestDomainException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     } catch(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-@Slf4j
+        log.error("An error occurred while testing domain", e);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 @RestController
 @RequestMapping("/api")
 public class MainController {
