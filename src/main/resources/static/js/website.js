@@ -20,21 +20,45 @@ function handleError(error) {
 function submitRequest() {
   var url = document.getElementById('url').value;
   if (!url) {
-    alert("Please enter an URL");
+    showAlert("Please enter an URL");
     return;
   }
-  url = sanitize(url);
-  var customHeaderKey = sanitize(document.getElementById('customHeaderKey').value || '');
-  var customHeaderValue = sanitize(document.getElementById('customHeaderValue').value || '');
+  url = sanitizeHtml(url);
   $.ajax({
     url: '/test-website',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
       'url': url,
-      'customHeaderKey': customHeaderKey,
-      'customHeaderValue': customHeaderValue
+      'customHeaderKey': sanitizeHtml(document.getElementById('customHeaderKey').value || ''),
+      'customHeaderValue': sanitizeHtml(document.getElementById('customHeaderValue').value || '')
     }),
+    success: updateOutput,
+    error: handleError
+  });
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
     success: updateOutput,
     error: handleError
   });
