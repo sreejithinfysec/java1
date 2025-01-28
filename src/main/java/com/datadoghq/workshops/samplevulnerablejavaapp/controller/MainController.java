@@ -151,8 +151,18 @@ public class MainController {
   }
 
 @RequestMapping(method=RequestMethod.POST, value="/view-file", consumes="application/json")
-public ResponseEntity<String> viewFile(@RequestBody ViewFileRequest request) {
+public ResponseEntity<String> viewFile(@Valid @RequestBody ViewFileRequest request) {
+    log.info("Reading file {}", request.getPath());
     try {
+        String result = fileService.readFile(request.getPath());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (FileForbiddenFileException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    } catch (FileReadException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+}
+
         // Validate the request
         if (request == null || request.path == null || request.path.isEmpty()) {
             throw new IllegalArgumentException("Invalid request");
