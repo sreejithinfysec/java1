@@ -20,21 +20,26 @@ function handleError(error) {
 function submitRequest() {
   var url = document.getElementById('url').value;
   if (!url) {
-    showCustomAlert("Please enter an URL");
+    alert("Please enter an URL");
     return;
   }
+  url = sanitize(url);
+  var customHeaderKey = sanitize(document.getElementById('customHeaderKey').value || '');
+  var customHeaderValue = sanitize(document.getElementById('customHeaderValue').value || '');
   $.ajax({
     url: '/test-website',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
       'url': url,
-      'customHeaderKey': document.getElementById('customHeaderKey').value || '',
-      'customHeaderValue': document.getElementById('customHeaderValue').value || ''
+      'customHeaderKey': customHeaderKey,
+      'customHeaderValue': customHeaderValue
     }),
     success: updateOutput,
     error: handleError
   });
+}
+
 }
 
 }
