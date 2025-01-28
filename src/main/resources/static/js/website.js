@@ -45,6 +45,8 @@ function submitRequest() {
 
 }
 
+}
+
 function showAlert(message) {
   let sanitizedMessage = sanitize(message);
   let div = document.createElement("div");
