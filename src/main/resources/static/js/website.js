@@ -47,6 +47,16 @@ function showAlert(message) {
 
 }
 
+function showAlert(message) {
+  let sanitizedMessage = sanitize(message);
+  let div = document.createElement("div");
+  div.innerHTML = sanitizedMessage;
+  let sanitizedHTML = div.textContent || div.innerText || "";
+  // Custom alert system implementation here
+}
+
+}
+
 }
 
 }
