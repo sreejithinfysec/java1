@@ -20,22 +20,31 @@ function handleError(error) {
 function submitRequest() {
   var url = document.getElementById('url').value;
   if (!url) {
-    displayMessageUsingModal("Please enter an URL");
+    showAlert("Please enter an URL");
     return;
   }
-  url = sanitize(url);
   $.ajax({
     url: '/test-website',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
-      'url': url,
-      'customHeaderKey': sanitize(document.getElementById('customHeaderKey').value || ''),
-      'customHeaderValue': sanitize(document.getElementById('customHeaderValue').value || '')
+      'url': sanitize(url),
+      'customHeaderKey': sanitize(document.getElementById('customHeaderKey').value) || '',
+      'customHeaderValue': sanitize(document.getElementById('customHeaderValue').value) || ''
     }),
     success: updateOutput,
     error: handleError
   });
+}
+
+function showAlert(message) {
+  let sanitizedMessage = sanitize(message);
+  let div = document.createElement("div");
+  div.innerHTML = sanitizedMessage;
+  let sanitizedHTML = div.textContent || div.innerText || "";
+  // Custom alert system implementation here
+}
+
 }
 
 }
