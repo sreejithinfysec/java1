@@ -18,23 +18,23 @@ function handleError(error) {
 }
 
 function submitRequest() {
-  var url = document.getElementById('url').value
+  var url = document.getElementById('url').value;
   if (!url) {
-    alert("Please enter an URL")
-    return
+    showAlert("Please enter an URL");
+    return;
   }
   $.ajax({
     url: '/test-website',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
-      'url': url,
-      'customHeaderKey': document.getElementById('customHeaderKey').value || '',
-      'customHeaderValue': document.getElementById('customHeaderValue').value || ''
+      'url': url
     }),
     success: updateOutput,
     error: handleError
-  })
+  });
+}
+
 }
 
 var form = document.querySelectorAll('form')[0]
