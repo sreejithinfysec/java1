@@ -43,7 +43,34 @@ public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request)
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     } catch(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+@Slf4j
+@RestController
+@RequestMapping("/api")
+public class MainController {
+
+    private final DomainTestService domainTestService;
+
+    public MainController(DomainTestService domainTestService) {
+        this.domainTestService = domainTestService;
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/test-domain", consumes = "application/json")
+    public ResponseEntity<String> testDomain(@RequestBody DomainTestRequest request) {
+        log.info("Testing domain {}", request.getDomainName());
+        try {
+            String result = domainTestService.testDomain(request.getDomainName());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (InvalidDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (UnableToTestDomainException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            log.error("Unexpected error occurred", e);
+            return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+
 }
 
 }
