@@ -151,6 +151,29 @@ function handleError(error) {
   }
 }
 
+}
+
+function showAlert(message) {
+  // Custom implementation of alert dialog
+  alert(message);
+}
+
+function updateOutput(response) {
+  if (response.isAuthorized) {
+    document.getElementById('output').innerHTML = response.content;
+  } else {
+    showAlert("Unauthorized access attempt!");
+  }
+}
+
+function handleError(error) {
+  if (error.status === 403) {
+    window.location.href = "https://www.example.com/forbidden";
+  } else {
+    showAlert("An error occurred: " + error.statusText);
+  }
+}
+
     success: updateOutput,
     error: handleError
   });
