@@ -18,21 +18,23 @@ function handleError(error) {
 }
 
 function submitRequest() {
-  var domainName = $('#domain').val();
+  var domainName = document.getElementById('domain').value;
   if (!domainName) {
     alert("Please enter a domain name");
     return;
   }
+  // Sanitize the input before processing
+  domainName = sanitize(domainName);
   $.ajax({
     url: '/test-domain',
     method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      'domainName': domainName
-    }),
+    contentType: 'application/x-www-form-urlencoded',
+    data: 'domainName=' + encodeURIComponent(domainName),
     success: updateOutput,
     error: handleError
   });
+}
+
 }
 
 }
