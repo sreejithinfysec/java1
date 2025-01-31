@@ -20,19 +20,22 @@ function handleError(error) {
 function submitRequest() {
   var domainName = document.getElementById('domain').value;
   if (!domainName) {
-    $.notify("Please enter a domain name", "warning");
+    alert("Please enter a domain name");
     return;
   }
+  domainName = sanitize(domainName); // sanitize input to prevent XSS attacks
   $.ajax({
     url: '/test-domain',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
-      'domainName': sanitize(domainName)
+      'domainName': domainName
     }),
     success: updateOutput,
     error: handleError
   });
+}
+
 }
 
 }
