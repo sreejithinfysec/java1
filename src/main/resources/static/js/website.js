@@ -42,6 +42,8 @@ function submitRequest() {
 
 }
 
+}
+
 function showAlert(message) {
   // Custom implementation of alert dialog
   alert(message);
