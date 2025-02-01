@@ -20,22 +20,25 @@ function handleError(error) {
 function submitRequest() {
   var url = document.getElementById('url').value;
   if (!url) {
-    showAlert("Please enter an URL"); // Replaced alert with a customizable alternative
+    // Consider using a modal dialog or confirmation dialog instead of alert
+    alert("Please enter an URL");
     return;
   }
-  url = sanitize(url); // Sanitize the URL to prevent XSS attacks
+  url = sanitize(url); // sanitize URL to prevent XSS attacks
   $.ajax({
     url: '/test-website',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({
       'url': url,
-      'customHeaderKey': sanitize(document.getElementById('customHeaderKey').value || ''), // Sanitize custom header key
-      'customHeaderValue': sanitize(document.getElementById('customHeaderValue').value || '') // Sanitize custom header value
+      'customHeaderKey': sanitize(document.getElementById('customHeaderKey').value || ''), // sanitize custom header key
+      'customHeaderValue': sanitize(document.getElementById('customHeaderValue').value || '') // sanitize custom header value
     }),
     success: updateOutput,
     error: handleError
   });
+}
+
 }
 
 }
